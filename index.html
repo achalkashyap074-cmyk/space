@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpaceStar — From Solar System to Multiverse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple: #a855f7;
+      --pink: #ec4899;
+      --dark: #050510;
+      --card-bg: rgba(13,13,26,0.7);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #050510;
+      color: #e9d5ff;
+      overflow-x: hidden;
+    }
+
+    h1,h2,h3,h4 { font-family: 'Orbitron', sans-serif; }
+
+    /* ── SCROLLBAR ─────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #050510; }
+    ::-webkit-scrollbar-thumb { background: #7B2FBE; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #a855f7; }
+
+    /* ── UTILS ─────────────────────────────────────────────── */
+    .cosmic-glow {
+      text-shadow: 0 0 12px rgba(168,85,247,.8), 0 0 28px rgba(236,72,153,.5), 0 0 50px rgba(168,85,247,.3);
+    }
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(168,85,247,.3);
+      transition: border-color .3s, box-shadow .3s, transform .3s;
+    }
+    .glass-card:hover {
+      border-color: rgba(236,72,153,.6);
+      box-shadow: 0 0 20px rgba(168,85,247,.3);
+      transform: translateY(-4px);
+    }
+    .gradient-line {
+      width: 96px; height: 4px;
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      border-radius: 9px;
+      margin: 0 auto;
+    }
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      margin-bottom: .75rem;
+    }
+    .btn-glow {
+      display: inline-block;
+      padding: 14px 36px;
+      border: 2px solid #a855f7;
+      border-radius: 50px;
+      background: transparent;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: .8rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .3s, box-shadow .3s;
+      text-decoration: none;
+    }
+    .btn-glow:hover {
+      background: rgba(168,85,247,.2);
+      box-shadow: 0 0 30px rgba(168,85,247,.6);
+    }
+
+    /* ── ANIMATIONS ────────────────────────────────────────── */
+    @keyframes twinkle {
+      0%   { opacity:.2; transform:scale(.8); }
+      100% { opacity:1;  transform:scale(1.3); box-shadow:0 0 6px rgba(255,255,255,.9),0 0 12px rgba(168,85,247,.6); }
+    }
+    @keyframes float-up {
+      0%   { transform:translateY(0)   opacity:1; }
+      100% { transform:translateY(-80px) opacity:0; }
+    }
+    @keyframes orbit {
+      from { transform:rotate(0deg); }
+      to   { transform:rotate(360deg); }
+    }
+    @keyframes spin {
+      from { transform:rotate(0deg); }
+      to   { transform:rotate(360deg); }
+    }
+    @keyframes pulse-glow {
+      0%,100% { box-shadow:0 0 20px rgba(168,85,247,.4); }
+      50%      { box-shadow:0 0 45px rgba(168,85,247,.9), 0 0 70px rgba(236,72,153,.4); }
+    }
+    @keyframes nebula-drift {
+      0%   { transform:translate(0,0) scale(1); }
+      33%  { transform:translate(20px,-15px) scale(1.05); }
+      66%  { transform:translate(-15px,10px) scale(.97); }
+      100% { transform:translate(0,0) scale(1); }
+    }
+    @keyframes fade-in-up {
+      from { opacity:0; transform:translateY(30px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes galaxy-spin {
+      from { transform:rotate(0deg); }
+      to   { transform:rotate(360deg); }
+    }
+    @keyframes multiverse-pulse {
+      0%,100% { transform:scale(1);   opacity:.7; }
+      50%      { transform:scale(1.2); opacity:1; }
+    }
+
+    /* ── GLITTER PARTICLES ─────────────────────────────────── */
+    .glitter { position:absolute; border-radius:50%; background:#fff; pointer-events:none; }
+
+    /* ═══════════════════════════════════════════════════════ */
+    /* 1. HERO                                                 */
+    /* ═══════════════════════════════════════════════════════ */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(ellipse at 20% 60%, rgba(139,92,246,.18) 0%, transparent 55%),
+                  radial-gradient(ellipse at 80% 20%, rgba(236,72,153,.12) 0%, transparent 55%),
+                  radial-gradient(ellipse at 50% 50%, #10051e 0%, #050510 70%);
+    }
+    #hero-starfield { position:absolute; inset:0; z-index:0; }
+    .hero-content { position:relative; z-index:2; padding:0 1rem; }
+    #hero h1 {
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      font-weight: 900;
+      letter-spacing: .06em;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 1.2rem;
+      animation: fade-in-up .8s ease both;
+    }
+    #hero p {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: #d8b4fe;
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+      animation: fade-in-up .8s .3s ease both;
+    }
+    .hero-cta { animation: fade-in-up .8s .6s ease both; }
+
+    /* ── Scroll arrow ── */
+    .scroll-arrow {
+      position: absolute;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex; flex-direction:column; align-items:center; gap:6px;
+      opacity: .6;
+      animation: fade-in-up 1s 1.2s ease both;
+    }
+    .scroll-arrow span {
+      display:block; width:14px; height:14px;
+      border-right:2px solid #a855f7; border-bottom:2px solid #a855f7;
+      transform:rotate(45deg);
+      animation:twinkle 1s ease-in-out infinite alternate;
+    }
+    .scroll-arrow span:nth-child(2) { animation-delay:.2s; }
+    .scroll-arrow span:nth-child(3) { animation-delay:.4s; }
+
+    /* ═══════════════════════════════════════════════════════ */
+    /* 2. COSMIC JOURNEY                                       */
+    /* ═══════════════════════════════════════════════════════ */
+    #cosmic-journey {
+      background: #050510;
+      padding: 6rem 1rem 4rem;
+      text-align: center;
+    }
+    #solar-system-wrap {
+      position: relative;
+      width: 100%;
+      height: 580px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 3rem 0;
+    }
+    #solar-system {
+      position: relative;
+      width: 720px; height: 720px;
+      flex-shrink: 0;
+    }
+    .sun {
+      position: absolute;
+      top:50%; left:50%;
+      width:56px; height:56px;
+      transform:translate(-50%,-50%);
+      border-radius:50%;
+      background: radial-gradient(circle, #fffbe6 10%, #fcd34d 50%, #f59e0b 100%);
+      box-shadow: 0 0 60px 25px rgba(253,211,77,.6), 0 0 120px 60px rgba(251,191,36,.2);
+      animation: pulse-glow 3s ease-in-out infinite;
+      z-index:10;
+    }
+    .orbit-ring {
+      position:absolute; top:50%; left:50%;
+      border-radius:50%;
+      border:1px solid rgba(168,85,247,.25);
+      transform:translate(-50%,-50%);
+    }
+    .planet-container {
+      position:absolute; top:50%; left:50%;
+      transform-origin:0 0;
+    }
+    .planet {
+      position:absolute;
+      border-radius:50%;
+      transform:translateX(-50%) translateY(-50%);
+    }
+    .planet-label {
+      position:absolute;
+      color:rgba(216,180,254,.7);
+      font-size:.6rem;
+      font-family:'Orbitron',sans-serif;
+      letter-spacing:.06em;
+      transform:translateX(-50%);
+      white-space:nowrap;
+      top:calc(100% + 4px);
+      left:50%;
+    }
+    .journey-labels {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:1.5rem; max-width:900px; margin:0 auto; padding:0 1rem;
+    }
+    .journey-label-card {
+      background: var(--card-bg);
+      border:1px solid rgba(168,85,247,.3);
+      border-radius:1rem; padding:1.5rem; text-align:center;
+      animation: fade-in-up .6s ease both;
+    }
+    .journey-label-card .num {
+      font-family:'Orbitron',sans-serif;
+      font-size:1.8rem; font-weight:700;
+      color:#a855f7; margin-bottom:.3rem;
+    }
+    .journey-label-card h4 { font-size:.9rem; margin-bottom:.4rem; }
+    .journey-label-card p  { font-size:.75rem; color:#c4b5fd; }
+
+    /* ═══════════════════════════════════════════════════════ */
+    /* 3. PLANET BLOCKS                                        */
+    /* ═══════════════════════════════════════════════════════ */
+    #planets {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .planets-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:1.5rem; margin-top:3rem;
+    }
+    .planet-card {
+      border-radius:1.25rem; padding:1.5rem;
+      text-align:center; cursor:pointer;
+    }
+    .planet-visual {
+      width:100%; height:130px;
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:1.2rem;
+    }
+    .css-planet-wrap { position:relative; display:flex; align-items:center; justify-content:center; }
+    .css-planet {
+      border-radius:50%;
+      animation: spin 6s linear infinite;
+    }
+    .css-ring {
+      position:absolute;
+      border-radius:50%; border:3px solid;
+      width:130%; height:35%;
+    }
+    .planet-card h3 {
+      font-size:1.2rem; margin-bottom:1rem;
+      transition: color .3s;
+    }
+    .planet-card:hover h3 { color:#a855f7; }
+    .planet-facts { text-align:left; font-size:.8rem; }
+    .planet-fact {
+      display:flex; justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:.35rem 0;
+    }
+    .planet-fact:last-child { border:none; }
+    .planet-fact .label { color:#9ca3af; }
+    .planet-fact .val   { color:#e9d5ff; font-weight:600; }
+
+    /* ═══════════════════════════════════════════════════════ */
+    /* 4. BEYOND SOLAR SYSTEM                                  */
+    /* ═══════════════════════════════════════════════════════ */
+    #beyond {
+      background: #0a0a1a;
+      padding: 5rem 2rem;
+      text-align:center;
+    }
+    .beyond-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:2rem; max-width:1100px; margin:3rem auto 0;
+    }
+    .beyond-card {
+      border-radius:1.5rem; padding:2rem; text-align:left;
+    }
+    .beyond-visual {
+      height:160px; border-radius:1rem;
+      background: linear-gradient(135deg, #1a1a3a, #0a0a1a);
+      border:1px solid rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:1.5rem; overflow:hidden; position:relative;
+    }
+    /* Stars visual */
+    .stars-vis .ring1 {
+      width:80px; height:80px; border-radius:50%;
+      border:2px dashed rgba(168,85,247,.5);
+      animation: spin 10s linear infinite;
+    }
+    .stars-vis .ring2 {
+      position:absolute; width:55px; height:55px; border-radius:50%;
+      border:2px dashed rgba(236,72,153,.5);
+      animation: spin 7s linear infinite reverse;
+    }
+    /* Galaxy visual */
+    .galaxy-vis svg { animation: galaxy-spin 20s linear infinite; }
+    /* Multiverse visual */
+    .multiverse-bubbles { display:flex; gap:1rem; align-items:center; }
+    .mbubble {
+      border-radius:50%;
+      animation: multiverse-pulse 2s ease-in-out infinite;
+    }
+    .mbubble:nth-child(2) { animation-delay:.6s; }
+    .mbubble:nth-child(3) { animation-delay:1.2s; }
+    .beyond-card h3 { font-size:1.3rem; margin-bottom:.75rem; }
+    .beyond-card p  { font-size:.9rem; color:#c4b5fd; line-height:1.7; }
+
+    /* ═══════════════════════════════════════════════════════ */
+    /* 5. FUN FACTS                                            */
+    /* ═══════════════════════════════════════════════════════ */
+    #facts {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position:relative;
+    }
+    .facts-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:1.5rem; margin-top:3rem;
+    }
+    .fact-card {
+      border-radius:1.25rem; padding:1.75rem;
+      transition: transform .3s;
+    }
+    .fact-card:hover { transform:translateY(-6px); }
+    .fact-icon {
+      font-size:2rem; margin-bottom:1rem;
+      background: rgba(255,255,255,.06);
+      width:56px; height:56px; border-radius:.75rem;
+      display:flex; align-items:center; justify-content:center;
+      transition: transform .3s;
+    }
+    .fact-card:hover .fact-icon { transform:scale(1.15); }
+    .fact-stat {
+      font-family:'Orbitron',sans-serif;
+      font-size:1.5rem; font-weight:900;
+      margin-bottom:.5rem;
+      background: linear-gradient(90deg,#a855f7,#ec4899);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      transition: all .3s;
+    }
+    .fact-card:hover .fact-stat {
+      text-shadow:none;
+    }
+    .fact-text { font-size:.88rem; color:#c4b5fd; line-height:1.6; }
+
+    /* ═══════════════════════════════════════════════════════ */
+    /* 6. CONTACT                                              */
+    /* ═══════════════════════════════════════════════════════ */
+    #contact {
+      padding: 5rem 2rem;
+      background: linear-gradient(180deg,#0d0a1a 0%, #050510 100%);
+      position:relative; overflow:hidden;
+      text-align:center;
+    }
+    #contact::before {
+      content:''; position:absolute;
+      top:-20%; left:-10%; width:50%; height:50%;
+      border-radius:50%;
+      background: rgba(168,85,247,.08);
+      filter:blur(80px);
+    }
+    #contact::after {
+      content:''; position:absolute;
+      bottom:-20%; right:-10%; width:50%; height:50%;
+      border-radius:50%;
+      background: rgba(236,72,153,.08);
+      filter:blur(80px);
+    }
+    .contact-inner {
+      max-width:660px; margin:0 auto; position:relative; z-index:1;
+    }
+    .contact-form-wrap {
+      border-radius:1.5rem; padding:2.5rem;
+      margin-top:2.5rem; text-align:left;
+    }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+    @media(max-width:600px){ .form-row { grid-template-columns:1fr; } }
+    .form-group { margin-bottom:1rem; }
+    .form-group label {
+      display:block; font-size:.8rem; color:#d8b4fe;
+      margin-bottom:.4rem; letter-spacing:.04em;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width:100%; padding:.75rem 1rem;
+      background:rgba(0,0,0,.5); border:1px solid rgba(168,85,247,.25);
+      border-radius:.6rem; color:#e9d5ff; font-family:'Space Grotesk',sans-serif;
+      font-size:.9rem; outline:none;
+      transition: border-color .3s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color:#a855f7; }
+    .form-group select option { background:#1a1a2e; }
+    .form-group textarea { resize:none; height:120px; }
+    .btn-submit {
+      width:100%; padding:1rem;
+      background: linear-gradient(90deg, #7c3aed, #ec4899);
+      border:none; border-radius:.75rem; color:#fff;
+      font-family:'Orbitron',sans-serif; font-size:.9rem; letter-spacing:.05em;
+      cursor:pointer; font-weight:700;
+      box-shadow:0 0 18px rgba(168,85,247,.4);
+      transition: box-shadow .3s, opacity .3s;
+      margin-top:.5rem;
+    }
+    .btn-submit:hover { box-shadow:0 0 30px rgba(236,72,153,.7); opacity:.9; }
+    .social-row {
+      margin-top:2rem; padding-top:1.5rem;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex; justify-content:center; gap:2.5rem;
+    }
+    .social-row a {
+      color:#fff; text-decoration:none;
+      font-size:.75rem; font-family:'Orbitron',sans-serif; letter-spacing:.12em;
+      transition:color .3s;
+    }
+    .social-row a:hover { color:#a855f7; }
+
+    /* ── Toast ── */
+    #toast {
+      position:fixed; bottom:2rem; right:2rem; z-index:9999;
+      background:linear-gradient(135deg,#7c3aed,#ec4899);
+      color:#fff; padding:1rem 1.5rem; border-radius:.75rem;
+      font-family:'Space Grotesk',sans-serif; font-size:.9rem;
+      box-shadow:0 0 30px rgba(168,85,247,.5);
+      transform:translateX(200%); transition:transform .4s ease;
+      max-width:300px;
+    }
+    #toast.show { transform:translateX(0); }
+    #toast strong { display:block; font-family:'Orbitron',sans-serif; font-size:.8rem; margin-bottom:.2rem; }
+
+    /* ── Form validation ── */
+    .form-error { color:#f87171; font-size:.75rem; margin-top:.25rem; display:none; }
+    .form-error.visible { display:block; }
+
+    /* ═══════════════════════════════════════════════════════ */
+    /* 7. FOOTER                                               */
+    /* ═══════════════════════════════════════════════════════ */
+    #footer {
+      background:#050510; padding:2.5rem 1rem;
+      border-top:1px solid rgba(168,85,247,.15);
+      text-align:center; position:relative; overflow:hidden;
+    }
+    #footer p {
+      font-family:'Orbitron',sans-serif; font-size:.8rem;
+      background:linear-gradient(90deg,#a855f7,#ec4899);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      letter-spacing:.1em;
+    }
+
+    /* ── Responsive ── */
+    @media(max-width:768px){
+      #solar-system { width:440px; height:440px; }
+      #solar-system-wrap { height:380px; }
+    }
+    @media(max-width:480px){
+      #solar-system { width:340px; height:340px; }
+      #solar-system-wrap { height:300px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════ -->
+<!-- 1. HERO                                 -->
+<!-- ════════════════════════════════════════ -->
+<section id="hero">
+  <div id="hero-starfield"></div>
+
+  <div class="hero-content">
+    <h1 class="cosmic-glow">SpaceStar</h1>
+    <p>From Solar System to Multiverse — Explore the Cosmos</p>
+    <div class="hero-cta">
+      <a href="#cosmic-journey" class="btn-glow">Begin the Journey</a>
+    </div>
+  </div>
+
+  <div class="scroll-arrow">
+    <span></span><span></span><span></span>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- 2. COSMIC JOURNEY                       -->
+<!-- ════════════════════════════════════════ -->
+<section id="cosmic-journey">
+  <h2 class="section-title cosmic-glow">Cosmic Journey</h2>
+  <p style="color:#c4b5fd;margin-bottom:.5rem;">From our Solar System to the edge of existence</p>
+  <div class="gradient-line"></div>
+
+  <div id="solar-system-wrap">
+    <div id="solar-system">
+      <div class="sun"></div>
+    </div>
+  </div>
+
+  <div class="journey-labels">
+    <div class="journey-label-card" style="animation-delay:.1s">
+      <div class="num">01</div>
+      <h4>Solar System</h4>
+      <p>8 planets, 1 star</p>
+    </div>
+    <div class="journey-label-card" style="animation-delay:.25s">
+      <div class="num">02</div>
+      <h4>Milky Way Galaxy</h4>
+      <p>200–400 billion stars</p>
+    </div>
+    <div class="journey-label-card" style="animation-delay:.4s">
+      <div class="num">03</div>
+      <h4>Observable Universe</h4>
+      <p>2 trillion galaxies</p>
+    </div>
+    <div class="journey-label-card" style="animation-delay:.55s">
+      <div class="num">04</div>
+      <h4>The Multiverse</h4>
+      <p>Infinite parallel realities</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- 3. PLANET BLOCKS                        -->
+<!-- ════════════════════════════════════════ -->
+<section id="planets">
+  <div style="text-align:center">
+    <h2 class="section-title cosmic-glow">Explore the Planets</h2>
+    <p style="color:#c4b5fd;margin-bottom:.75rem;">Our Solar System's eight magnificent worlds</p>
+    <div class="gradient-line"></div>
+  </div>
+  <div class="planets-grid" id="planets-grid"></div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- 4. BEYOND SOLAR SYSTEM                  -->
+<!-- ════════════════════════════════════════ -->
+<section id="beyond">
+  <h2 class="section-title cosmic-glow">Beyond Our Solar System</h2>
+  <div class="gradient-line" style="margin-top:.5rem"></div>
+  <div class="beyond-grid">
+
+    <div class="beyond-card glass-card">
+      <div class="beyond-visual stars-vis">
+        <div class="ring1"></div>
+        <div class="ring2"></div>
+      </div>
+      <h3>Stars & Constellations</h3>
+      <p>The closest star system to Earth is Alpha Centauri, 4.37 light-years away. Our night sky contains 88 officially recognised constellations with billions of stars.</p>
+    </div>
+
+    <div class="beyond-card glass-card">
+      <div class="beyond-visual galaxy-vis">
+        <svg width="130" height="130" viewBox="0 0 100 100">
+          <path d="M50 50 Q 80 20 90 50 Q 60 80 50 50 Z" fill="none" stroke="rgba(168,85,247,.6)" stroke-width=".8"/>
+          <path d="M50 50 Q 20 80 10 50 Q 40 20 50 50 Z" fill="none" stroke="rgba(236,72,153,.6)" stroke-width=".8"/>
+          <path d="M50 50 Q 70 30 75 50 Q 55 70 50 50 Z" fill="none" stroke="rgba(168,85,247,.3)" stroke-width=".5"/>
+          <circle cx="50" cy="50" r="3" fill="white" style="filter:drop-shadow(0 0 4px white)"/>
+        </svg>
+      </div>
+      <h3>The Milky Way</h3>
+      <p>Our home galaxy is a barred spiral spanning 100,000 light-years across, containing an estimated 100–400 billion stars and at least as many planets.</p>
+    </div>
+
+    <div class="beyond-card glass-card">
+      <div class="beyond-visual">
+        <div class="multiverse-bubbles">
+          <div class="mbubble" style="width:48px;height:48px;background:radial-gradient(circle,#c084fc,#7c3aed,transparent);"></div>
+          <div class="mbubble" style="width:64px;height:64px;background:radial-gradient(circle,#f9a8d4,#ec4899,transparent);animation-delay:.6s"></div>
+          <div class="mbubble" style="width:40px;height:40px;background:radial-gradient(circle,#93c5fd,#3b82f6,transparent);animation-delay:1.2s"></div>
+        </div>
+      </div>
+      <h3>The Multiverse</h3>
+      <p>Theoretical physics suggests our universe may be one of infinite universes comprising a multiverse, each governed by different physical laws and constants.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- 5. FUN FACTS                            -->
+<!-- ════════════════════════════════════════ -->
+<section id="facts">
+  <div style="text-align:center">
+    <h2 class="section-title cosmic-glow">Mind-Blowing Space Facts</h2>
+    <div class="gradient-line" style="margin-top:.5rem"></div>
+  </div>
+  <div class="facts-grid">
+    <div class="fact-card glass-card">
+      <div class="fact-icon">⏱</div>
+      <div class="fact-stat">8 min 20 sec</div>
+      <div class="fact-text">Time for sunlight to travel from the Sun to Earth — a journey of 150 million km.</div>
+    </div>
+    <div class="fact-card glass-card">
+      <div class="fact-icon">🚀</div>
+      <div class="fact-stat">40,000 km/h</div>
+      <div class="fact-text">The escape velocity a rocket needs to break free from Earth's gravitational pull.</div>
+    </div>
+    <div class="fact-card glass-card">
+      <div class="fact-icon">🌍</div>
+      <div class="fact-stat">1,000+ km/h</div>
+      <div class="fact-text">Earth spins at this speed at the equator, while also orbiting the Sun at 107,000 km/h.</div>
+    </div>
+    <div class="fact-card glass-card">
+      <div class="fact-icon">☀</div>
+      <div class="fact-stat">1,000,000×</div>
+      <div class="fact-text">One million Earths could fit inside the Sun — our star's diameter is 1.4 million km.</div>
+    </div>
+    <div class="fact-card glass-card">
+      <div class="fact-icon">✨</div>
+      <div class="fact-stat">200 Billion</div>
+      <div class="fact-text">Estimated number of galaxies in the observable universe, each containing billions of stars.</div>
+    </div>
+    <div class="fact-card glass-card">
+      <div class="fact-icon">❄</div>
+      <div class="fact-stat">−270.45 °C</div>
+      <div class="fact-text">The near-absolute-zero baseline temperature of deep space, just 2.7 K above absolute zero.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- 6. CONTACT                              -->
+<!-- ════════════════════════════════════════ -->
+<section id="contact">
+  <div class="contact-inner">
+    <h2 class="section-title cosmic-glow">Want to Know More?</h2>
+    <p style="color:#c4b5fd;margin:.6rem 0 0">Reach out for collaborations, questions, or cosmic conversations.</p>
+    <div class="gradient-line" style="margin-top:1rem"></div>
+
+    <div class="contact-form-wrap glass-card">
+      <form id="contact-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Carl Sagan" />
+            <div class="form-error" id="err-name">Please enter your name.</div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="carl@cosmos.com" />
+            <div class="form-error" id="err-email">Please enter a valid email.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="subject">Cosmic Topic</label>
+          <select id="subject">
+            <option value="">Select a topic</option>
+            <option value="general">General Inquiry</option>
+            <option value="collab">Collaboration</option>
+            <option value="science">Astrophysics Question</option>
+            <option value="other">Other Dimensions</option>
+          </select>
+          <div class="form-error" id="err-subject">Please select a topic.</div>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Write your transmission here..."></textarea>
+          <div class="form-error" id="err-message">Message must be at least 10 characters.</div>
+        </div>
+        <button type="submit" class="btn-submit">Send to the Stars</button>
+      </form>
+
+      <div class="social-row">
+        <a href="https://www.instagram.com/achal_kashyap_7?igsh=MWMyMWt3NWhzNDd2cA==">Instagram</a>
+        <a href="#">X / Twitter</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!-- 7. FOOTER                               -->
+<!-- ════════════════════════════════════════ -->
+<footer id="footer">
+  <div id="footer-stars" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
+  <p style="position:relative;z-index:1;">SpaceStar &copy; 2026 — Exploring the Cosmos</p>
+</footer>
+
+<!-- Toast -->
+<div id="toast">
+  <strong>Transmission Sent!</strong>
+  Your message has been beamed across the cosmos.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<!-- JAVASCRIPT                              -->
+<!-- ════════════════════════════════════════ -->
+<script>
+/* ─── 1. HERO STARFIELD ─────────────────────────────────── */
+(function(){
+  const wrap = document.getElementById('hero-starfield');
+  for(let i=0;i<180;i++){
+    const s = document.createElement('div');
+    s.className='glitter';
+    const sz = Math.random()*2.2+.4;
+    Object.assign(s.style,{
+      top:  `${Math.random()*100}%`,
+      left: `${Math.random()*100}%`,
+      width:`${sz}px`, height:`${sz}px`,
+      opacity: Math.random()*.8+.15,
+      animation:`twinkle ${Math.random()*3+2}s ease-in-out ${Math.random()*4}s infinite alternate`
+    });
+    wrap.appendChild(s);
+  }
+  // Extra glitter in hero
+  const hero = document.getElementById('hero');
+  for(let i=0;i<35;i++){
+    const g = document.createElement('div');
+    g.className='glitter';
+    const sz2 = Math.random()*3+1;
+    Object.assign(g.style,{
+      position:'absolute', zIndex:1,
+      top:`${Math.random()*100}%`, left:`${Math.random()*100}%`,
+      width:`${sz2}px`, height:`${sz2}px`,
+      background: i%3===0 ? '#a855f7' : i%3===1 ? '#ec4899' : '#fff',
+      animation:`twinkle ${Math.random()*2+2}s ease-in-out ${Math.random()*3}s infinite alternate`
+    });
+    hero.appendChild(g);
+  }
+})();
+
+/* ─── 2. SOLAR SYSTEM ───────────────────────────────────── */
+(function(){
+  const wrap = document.getElementById('solar-system');
+  const isSmall = window.innerWidth < 480;
+  const isMed   = window.innerWidth < 768;
+  const scale = isSmall ? .47 : isMed ? .61 : 1;
+
+  const planets = [
+    { name:'Mercury', r:72,  size:8,  color:'#94a3b8', dur:5,  label:'Mercury' },
+    { name:'Venus',   r:105, size:12, color:'#fbbf24', dur:8,  label:'Venus'   },
+    { name:'Earth',   r:140, size:13, color:'#3b82f6', dur:12, label:'Earth'   },
+    { name:'Mars',    r:175, size:10, color:'#ef4444', dur:18, label:'Mars'    },
+    { name:'Jupiter', r:230, size:26, color:'#f59e0b', dur:30, label:'Jupiter' },
+    { name:'Saturn',  r:295, size:20, color:'#fde68a', dur:44, ring:true, label:'Saturn' },
+    { name:'Uranus',  r:340, size:14, color:'#2dd4bf', dur:60, label:'Uranus'  },
+    { name:'Neptune', r:360, size:13, color:'#60a5fa', dur:80, label:'Neptune' },
+  ];
+
+  planets.forEach(p => {
+    const ringEl = document.createElement('div');
+    ringEl.className='orbit-ring';
+    const d = p.r*2*scale;
+    Object.assign(ringEl.style,{
+      width:`${d}px`, height:`${d}px`
+    });
+    wrap.appendChild(ringEl);
+
+    const cont = document.createElement('div');
+    cont.className='planet-container';
+    cont.style.cssText=`
+      position:absolute; top:50%; left:50%;
+      transform-origin:0 0;
+      animation:orbit ${p.dur}s linear infinite;
+    `;
+
+    const planetEl = document.createElement('div');
+    planetEl.className='planet';
+    const ps = (p.size||10)*scale;
+    Object.assign(planetEl.style,{
+      width:`${ps}px`, height:`${ps}px`,
+      top:`-${p.r*scale}px`,
+      left:'0px',
+      transform:'translateX(-50%) translateY(-50%)',
+      background:`radial-gradient(circle at 35% 35%, rgba(255,255,255,.35) 5%, ${p.color} 45%, #0d0520 100%)`,
+      boxShadow:`0 0 ${ps}px ${ps*.4}px ${p.color}55`
+    });
+
+    const labelEl = document.createElement('div');
+    labelEl.className='planet-label';
+    labelEl.textContent=p.label;
+    planetEl.appendChild(labelEl);
+
+    if(p.ring){
+      const ringWrap = document.createElement('div');
+      Object.assign(ringWrap.style,{
+        position:'absolute', top:'50%', left:'50%',
+        transform:'translate(-50%,-50%) rotateX(65deg)',
+        width:`${ps*3.2}px`, height:`${ps*.8}px`,
+        borderRadius:'50%',
+        border:`${Math.max(1,ps*.12)}px solid rgba(253,211,77,.55)`,
+        boxShadow:`0 0 8px rgba(253,211,77,.3)`,
+        pointerEvents:'none'
+      });
+      planetEl.appendChild(ringWrap);
+    }
+
+    cont.appendChild(planetEl);
+    wrap.appendChild(cont);
+  });
+
+  // Background stars for cosmic journey section
+  const bg = document.getElementById('solar-system-wrap');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');
+    s.className='glitter';
+    Object.assign(s.style,{
+      position:'absolute', zIndex:0,
+      top:`${Math.random()*100}%`, left:`${Math.random()*100}%`,
+      width:`${Math.random()*2+.5}px`, height:`${Math.random()*2+.5}px`,
+      opacity:Math.random()*.6+.1,
+      animation:`twinkle ${Math.random()*3+2}s ease-in-out ${Math.random()*3}s infinite alternate`
+    });
+    bg.appendChild(s);
+  }
+})();
+
+/* ─── 3. PLANET CARDS ───────────────────────────────────── */
+(function(){
+  const planets = [
+    { name:'Mercury', color:'#94a3b8', dist:'57.9M km',  dia:'4,880 km',    moons:0  },
+    { name:'Venus',   color:'#fbbf24', dist:'108.2M km', dia:'12,104 km',   moons:0  },
+    { name:'Earth',   color:'#3b82f6', dist:'149.6M km', dia:'12,742 km',   moons:1  },
+    { name:'Mars',    color:'#ef4444', dist:'227.9M km', dia:'6,779 km',    moons:2  },
+    { name:'Jupiter', color:'#f59e0b', dist:'778.5M km', dia:'139,820 km',  moons:95 },
+    { name:'Saturn',  color:'#fde68a', dist:'1.4B km',   dia:'116,460 km',  moons:146, ring:true },
+    { name:'Uranus',  color:'#2dd4bf', dist:'2.9B km',   dia:'50,724 km',   moons:28 },
+    { name:'Neptune', color:'#60a5fa', dist:'4.5B km',   dia:'49,244 km',   moons:16 },
+  ];
+  const grid = document.getElementById('planets-grid');
+  const sz = [70,80,84,76,100,90,78,76];
+
+  planets.forEach((p,i)=>{
+    const card = document.createElement('div');
+    card.className='planet-card glass-card';
+    const ps = sz[i];
+    card.innerHTML=`
+      <div class="planet-visual">
+        <div class="css-planet-wrap">
+          <div class="css-planet" style="
+            width:${ps}px;height:${ps}px;
+            background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.4) 5%,${p.color} 45%,#0d0520 100%);
+            box-shadow:0 0 ${ps*.35}px ${ps*.15}px ${p.color}66;
+            animation-duration:${5+i}s;
+          "></div>
+          ${p.ring ? `<div class="css-ring" style="border-color:${p.color}99;width:${ps*1.7}px;height:${ps*.4}px;"></div>` : ''}
+        </div>
+      </div>
+      <h3>${p.name}</h3>
+      <div class="planet-facts">
+        <div class="planet-fact"><span class="label">Distance</span><span class="val">${p.dist}</span></div>
+        <div class="planet-fact"><span class="label">Diameter</span><span class="val">${p.dia}</span></div>
+        <div class="planet-fact"><span class="label">Moons</span><span class="val" style="color:#c084fc;font-size:1rem">${p.moons}</span></div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+})();
+
+/* ─── 4. FOOTER STARS ───────────────────────────────────── */
+(function(){
+  const wrap = document.getElementById('footer-stars');
+  for(let i=0;i<40;i++){
+    const s=document.createElement('div');
+    s.className='glitter';
+    Object.assign(s.style,{
+      top:`${Math.random()*100}%`, left:`${Math.random()*100}%`,
+      width:`${Math.random()*1.8+.4}px`, height:`${Math.random()*1.8+.4}px`,
+      opacity:Math.random()*.6+.1,
+      animation:`twinkle ${Math.random()*3+2}s ease-in-out ${Math.random()*3}s infinite alternate`
+    });
+    wrap.appendChild(s);
+  }
+})();
+
+/* ─── 5. CONTACT FORM ───────────────────────────────────── */
+(function(){
+  const form = document.getElementById('contact-form');
+  const toast = document.getElementById('toast');
+
+  function showToast(){
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), 4000);
+  }
+  function showErr(id, show){
+    const el = document.getElementById('err-'+id);
+    if(el) el.classList.toggle('visible', show);
+  }
+
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    const name    = document.getElementById('name').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value.trim();
+    let valid = true;
+
+    showErr('name',    !name);         if(!name)    valid=false;
+    showErr('email',   !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) valid=false;
+    showErr('subject', !subject);      if(!subject) valid=false;
+    showErr('message', message.length<10); if(message.length<10) valid=false;
+
+    if(valid){
+      form.reset();
+      showToast();
+    }
+  });
+})();
+
+/* ─── 6. SCROLL REVEAL ──────────────────────────────────── */
+(function(){
+  const els = document.querySelectorAll('.glass-card, .journey-label-card, .beyond-card, .fact-card, .planet-card');
+  els.forEach(el=>{
+    el.style.opacity='0';
+    el.style.transform='translateY(28px)';
+    el.style.transition='opacity .6s ease, transform .6s ease, border-color .3s, box-shadow .3s';
+  });
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.style.opacity='1';
+        e.target.style.transform='translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.12});
+  els.forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>
