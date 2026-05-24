@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <h1 class="typing" align="center">Welcome To Spacestar</h1>
+  <h1 class="typing" align="center">Welcome To AK Space</h1>
   
     <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -262,8 +262,8 @@ section{
     }
     .sun {
       position: absolute;
-      top:42%; left:41.43%;
-      width:56px; height:56px;
+      top:41%; left:41.43%;
+      width:17%; height:17%;
       transform:translate(-50%,-50%);
       border-radius:50%;
       background: radial-gradient(circle, #fffbe6 10%, #fcd34d 50%, #f59e0b 100%);
@@ -779,7 +779,75 @@ document.getElementById("progressBar").style.width=scrolled+"%";
 }
 
 
+/* FOOTER */
 
+.footer{
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(10px);
+    padding: 60px 10%;
+    margin-top: 100px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 40px;
+}
+
+.footer-box h2{
+    color: #00eaff;
+    margin-bottom: 15px;
+}
+
+.footer-box h3{
+    color: white;
+    margin-bottom: 15px;
+}
+
+.footer-box p{
+    color: #aaa;
+    line-height: 1.7;
+}
+
+.footer-box a{
+    display: block;
+    color: #bbb;
+    text-decoration: none;
+    margin: 10px 0;
+    transition: 0.3s;
+}
+
+.footer-box a:hover{
+    color: #00eaff;
+    transform: translateX(5px);
+}
+
+.footer-bottom{
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 40px;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.footer-bottom p{
+    color: #888;
+    margin-bottom: 15px;
+}
+
+#topBtn{
+    padding: 12px 20px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(45deg,#00eaff,#6a5cff);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#topBtn:hover{
+    transform: scale(1.1);
+}
 
 </style>
 
@@ -1120,6 +1188,73 @@ document.getElementById("loader").style.display="none";
   <div id="footer-stars" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
   <p style="position:relative;z-index:1;">SpaceStar &copy; 2026 — Exploring the Cosmos</p>
 </footer>
+<!-- FOOTER -->
+<footer class="footer">
+
+  <div class="footer-container" style=style="position:absolute;inset:0;pointer-events:none;overflow:hidden;>
+
+    <!-- Brand -->
+    <div class="footer-box">
+      <h2>AK SPACE</h2>
+      <p>
+        Exploring the universe with creativity, technology and imagination.
+        Built by Achal Kashyap.
+      </p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-box">
+      <h3>Quick Links</h3>
+      <a href="#hero-starfield">Home</a>
+      <a href="#about-space">About</a>
+      <a href="#planets">Planets</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <!-- Legal -->
+    <div class="footer-box">
+      <h3>Legal</h3>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="Terms.html">Terms & Conditions</a>
+      <a href="Cookie.html">Cookie Policy</a>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-box">
+      <h3>Contact Me</h3>
+
+      <a href="mailto:achalkashyap074@gmail.com">
+        📧 Gmail
+      </a>
+
+      <a href="https://instagram.com/" target="_blank">
+        📸 Instagram
+      </a>
+
+      <a href="https://github.com/" target="_blank">
+        💻 GitHub
+      </a>
+    </div>
+
+  </div>
+  
+  
+  
+    <div class="footer-box">
+      <h3>My Profile</h3>
+     <button onclick="window.open('https://achalkashyap074-cmyk.github.io/Achal_kashyap/')">
+Open Website
+</button>
+  <!-- Bottom -->
+  <div class="footer-bottom">
+    <p>© 2026 AK SPACE | Designed By Achal Kashyap</p>
+
+    <button onclick="scrollToTop()" id="topBtn">
+      ↑ Back To Top
+    </button>
+  </div>
+
+</footer>
 
 <!-- Toast -->
 <div id="toast">
@@ -1377,8 +1512,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 <style>
 .cursor{
-  width:20px;
-  height:20px;
+  width:0px;
+  height:0px;
   border-radius:50%;
   background:#c77dff;
   position:fixed;
@@ -1880,6 +2015,16 @@ gridGroup.add(line);
 }
 
 earth.add(gridGroup);
+</script>
+<script>
+
+function scrollToTop(){
+    window.scrollTo({
+        top:0,
+        behavior:'smooth'
+    });
+}
+
 </script>
 </body>
 </html>
