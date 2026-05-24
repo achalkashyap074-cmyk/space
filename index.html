@@ -1,12 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <h1 class="typing" align="center">Welcome To Spacestar</h1>
+  
+    <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Rotating Earth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+
+<style>
+.typing{
+  overflow:hidden;
+  border-right:3px solid white;
+  white-space:nowrap;
+  width:0;
+  animation:typing 4s steps(30,end) forwards,
+  blink 1s infinite;
+}
+
+@keyframes typing{
+  from{width:0}
+  to{width:100%}
+}
+
+@keyframes blink{
+  50%{border-color:transparent;}
+}
+</style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SpaceStar — From Solar System to Multiverse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
+  html{
+  scroll-behavior: smooth;
+}
+
+body{
+  overflow-x: hidden;
+}
+
+/* Section smooth appearance */
+section{
+  transition: all 0.6s ease;
+}
+  
+  body{
+  background: linear-gradient(-45deg,#0f0c29,#302b63,#24243e,#000000);
+  background-size: 400% 400%;
+  animation: galaxy 12s ease infinite;
+}
+
+@keyframes galaxy{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+  
+  
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -179,6 +233,10 @@
     .scroll-arrow span:nth-child(2) { animation-delay:.2s; }
     .scroll-arrow span:nth-child(3) { animation-delay:.4s; }
 
+
+
+
+
     /* ═══════════════════════════════════════════════════════ */
     /* 2. COSMIC JOURNEY                                       */
     /* ═══════════════════════════════════════════════════════ */
@@ -204,7 +262,7 @@
     }
     .sun {
       position: absolute;
-      top:50%; left:50%;
+      top:42%; left:41.43%;
       width:56px; height:56px;
       transform:translate(-50%,-50%);
       border-radius:50%;
@@ -505,9 +563,231 @@
       #solar-system { width:340px; height:340px; }
       #solar-system-wrap { height:300px; }
     }
+    
+    <div class="stars"></div>
+
+<style>
+.stars{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:url('https://www.transparenttextures.com/patterns/stardust.png');
+  z-index:-1;
+  animation: moveStars 60s linear infinite;
+}
+
+@keyframes moveStars{
+  from{transform:translateY(0);}
+  to{transform:translateY(-1000px);}
+}
+    
   </style>
 </head>
 <body>
+  <div id="progressBar"></div>
+
+<style>
+#progressBar{
+  position:fixed;
+  top:0;
+  left:0;
+  height:5px;
+  width:0%;
+  background:linear-gradient(to right,#ff00ff,#00ffff);
+  z-index:9999;
+}
+</style>
+
+<script>
+window.onscroll=function(){
+let winScroll=document.body.scrollTop || document.documentElement.scrollTop;
+
+let height=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+
+let scrolled=(winScroll/height)*100;
+
+document.getElementById("progressBar").style.width=scrolled+"%";
+};
+</script>
+  
+  <div id="loader">
+  <h1>Loading Universe...</h1>
+</div>
+
+<style>
+#loader{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  color:white;
+  font-size:30px;
+}
+
+#loader h1{
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{opacity:0.5;}
+  50%{opacity:1;}
+  100%{opacity:0.5;}
+}
+
+/* ===== EARTH SECTION ===== */
+
+.earth-section{
+  position:relative;
+  background:#050510;
+  padding:120px 20px;
+  overflow:hidden;
+}
+
+#starfield{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+
+.star{
+  position:absolute;
+  border-radius:50%;
+  background:#fff;
+}
+
+.earth-wrap{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1.5rem;
+}
+
+.earth-wrap h1{
+  color:white;
+  font-size:3rem;
+  text-shadow:0 0 20px #3b82f6;
+}
+
+.accent-line{
+  width:90px;
+  height:4px;
+  border-radius:20px;
+  background:linear-gradient(90deg,#3b82f6,#a855f7);
+}
+
+.canvas-wrap{
+  position:relative;
+}
+
+.canvas-glow{
+  position:absolute;
+  inset:-30px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(59,130,246,.28)0%,transparent 70%);
+  animation:pulse-glow 3s ease-in-out infinite;
+}
+
+.legend{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  justify-content:center;
+  color:white;
+}
+
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.legend-line{
+  width:26px;
+  height:2px;
+}
+
+.coords-box{
+  background:rgba(13,13,26,0.8);
+  border:1px solid rgba(59,130,246,0.25);
+  border-radius:20px;
+  padding:20px;
+  display:flex;
+  gap:30px;
+  flex-wrap:wrap;
+  justify-content:center;
+  color:white;
+}
+
+.coord-label{
+  color:#60a5fa;
+  font-size:.7rem;
+}
+
+.coord-value{
+  font-size:1rem;
+  font-weight:bold;
+}
+
+@keyframes pulse-glow{
+  0%,100%{
+    opacity:.55;
+    transform:scale(1);
+  }
+
+  50%{
+    opacity:1;
+    transform:scale(1.07);
+  }
+}
+
+@keyframes twinkle{
+  0%{opacity:.15;}
+  100%{opacity:.9;}
+}
+
+
+
+/* ===== REALISTIC 3D EARTH ===== */
+
+#earth3d{
+  width: 520px;
+  height: 400px;
+  max-width: 90vw;
+  margin: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  filter:
+    drop-shadow(0 0 40px rgba(59,130,246,.45))
+    drop-shadow(0 0 90px rgba(96,165,250,.25));
+}
+
+#earth3d canvas{
+  width:100% !important;
+  height:100% !important;
+  display:block;
+}
+
+.canvas-glow{
+  animation:pulse-glow 4s ease-in-out infinite;
+}
+
+
+
+
+</style>
+
+<script>
+window.addEventListener("load",()=>{
+document.getElementById("loader").style.display="none";
+});
+</script>
 
 <!-- ════════════════════════════════════════ -->
 <!-- 1. HERO                                 -->
@@ -565,6 +845,55 @@
     </div>
   </div>
 </section>
+
+
+<!-- ABOUT SPACE -->
+<section id="about-space" style="
+  padding: 5rem 2rem;
+  background: linear-gradient(135deg, #0a0a1a 0%, #0d0520 50%, #050510 100%);
+  position: relative;
+  overflow: hidden;
+">
+  <!-- Purple glow blobs (decorative) -->
+  <div style="position:absolute;top:-10%;right:-5%;width:420px;height:420px;border-radius:50%;background:rgba(168,85,247,0.07);filter:blur(90px);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-10%;left:-5%;width:360px;height:360px;border-radius:50%;background:rgba(236,72,153,0.06);filter:blur(80px);pointer-events:none;"></div>
+
+  <div style="max-width:900px;margin:0 auto;position:relative;z-index:1;">
+
+    <!-- Left-aligned heading -->
+    <h2 style="
+      font-family:'Orbitron',sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.06em;
+      text-align: left;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 0 12px rgba(168,85,247,.9), 0 0 30px rgba(236,72,153,.5);
+    ">ABOUT SPACE</h2>
+
+    <!-- Pink-purple accent line -->
+    <div style="width:80px;height:4px;background:linear-gradient(90deg,#a855f7,#ec4899);border-radius:9px;margin-bottom:2rem;"></div>
+
+    <!-- Paragraph -->
+    <p style="
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      line-height: 1.95;
+      color: #c4b5fd;
+      text-align: left;
+      background: rgba(13,13,26,0.6);
+      border: 1px solid rgba(168,85,247,0.2);
+      border-radius: 1.25rem;
+      padding: 2rem 2.5rem;
+      backdrop-filter: blur(12px);
+    ">
+      Space — the final frontier — is an almost incomprehensibly vast expanse that stretches far beyond anything the human mind can truly grasp. It begins roughly 100 kilometres above Earth's surface, where the atmosphere fades into the silent vacuum of the cosmos, and extends outward for at least 93 billion light-years in every direction across the observable universe. Within this staggering volume exist more stars than grains of sand on all of Earth's beaches combined — estimated at over a septillion (10²⁴). Planets, moons, asteroids, comets, nebulae, black holes, neutron stars, and entire galaxies spiral through the dark in a grand cosmic dance governed by gravity, electromagnetism, and the fundamental forces of physics. Our own Solar System — a tiny speck in the Milky Way galaxy — contains eight planets, hundreds of moons, and a dazzling asteroid belt, yet it represents an almost negligible fraction of the known universe. Beyond our galaxy lie over two trillion more galaxies, each home to billions of stars and planetary systems, many of which may harbour conditions suitable for life. Space is not merely empty darkness; it is threaded with cosmic microwave background radiation, dark matter, and dark energy — the invisible scaffolding that shapes the large-scale structure of everything that exists. To study space is to study the origin, nature, and destiny of the universe itself — and perhaps, one day, to discover that we are not alone within it.
+    </p>
+
+  </div>
+</section>
+
 
 <!-- ════════════════════════════════════════ -->
 <!-- 3. PLANET BLOCKS                        -->
@@ -665,6 +994,74 @@
   </div>
 </section>
 
+
+
+<!-- ===== EARTH SECTION START ===== -->
+
+<div id="starfield"></div>
+
+<section class="earth-wrap">
+  <h1>Planet Earth</h1>
+  <div class="accent-line"></div>
+
+  <div class="canvas-wrap">
+    <div class="canvas-glow"></div>
+    <div id="earth3d"></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-line" style="background:rgba(255,255,255,0.65);"></div>
+      Equator (0°)
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-line" style="background:rgba(239,68,68,0.85);"></div>
+      Prime Meridian (0°)
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-line" style="background:rgba(251,191,36,0.7);border-top:1px dashed rgba(251,191,36,0.7);height:0;"></div>
+      Tropics (±23.5°)
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-line" style="background:rgba(255,255,255,0.22);"></div>
+      Grid (every 15°)
+    </div>
+  </div>
+
+  <div class="coords-box">
+    <div class="coord-item">
+      <div class="coord-label">Rotation</div>
+      <div class="coord-value" id="stat-rot">0.0°</div>
+    </div>
+
+    <div class="coord-item">
+      <div class="coord-label">Axis Tilt</div>
+      <div class="coord-value">23.5°</div>
+    </div>
+
+    <div class="coord-item">
+      <div class="coord-label">Lat Lines</div>
+      <div class="coord-value">11</div>
+    </div>
+
+    <div class="coord-item">
+      <div class="coord-label">Lon Lines</div>
+      <div class="coord-value">24</div>
+    </div>
+
+    <div class="coord-item">
+      <div class="coord-label">Speed</div>
+      <div class="coord-value">1.8°/f</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EARTH SECTION END ===== -->
+
+
 <!-- ════════════════════════════════════════ -->
 <!-- 6. CONTACT                              -->
 <!-- ════════════════════════════════════════ -->
@@ -675,7 +1072,7 @@
     <div class="gradient-line" style="margin-top:1rem"></div>
 
     <div class="contact-form-wrap glass-card">
-      <form id="contact-form" novalidate>
+      <form id="contact-form" action="https://formsubmit.co/achalkashyap074@gmail.com" method="POST">
         <div class="form-row">
           <div class="form-group">
             <label for="name">Name</label>
@@ -964,6 +1361,525 @@
   },{threshold:.12});
   els.forEach(el=>io.observe(el));
 })();
+</script>
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    document.querySelector(this.getAttribute('href')).scrollIntoView({
+      behavior: 'smooth'
+    });
+  });
+});
+</script>
+<div class="cursor"></div>
+
+<style>
+.cursor{
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:#c77dff;
+  position:fixed;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 20px #c77dff;
+  z-index:9999;
+}
+</style>
+
+<script>
+const cursor=document.querySelector(".cursor");
+
+document.addEventListener("mousemove",(e)=>{
+cursor.style.left=e.clientX+"px";
+cursor.style.top=e.clientY+"px";
+});
+</script>
+
+
+<script>
+
+/* STARS */
+(function(){
+  var wrap=document.getElementById('starfield');
+
+  for(var i=0;i<220;i++){
+    var s=document.createElement('div');
+    s.className='star';
+
+    var sz=Math.random()*2+0.4;
+
+    s.style.cssText=
+      'top:'+Math.random()*100+
+      '%;left:'+Math.random()*100+
+      '%;width:'+sz+
+      'px;height:'+sz+
+      'px;opacity:'+Math.random()*0.7;
+
+    wrap.appendChild(s);
+  }
+})();
+
+</script>
+<script>
+
+(function(){
+
+const canvas = document.getElementById("earth");
+const ctx = canvas.getContext("2d");
+
+const W = canvas.width = 420;
+const H = canvas.height = 420;
+
+const cx = W/2;
+const cy = H/2;
+const R  = 170;
+
+let rot = 0;
+
+/* continents */
+const lands = [
+
+[[70,-140],[72,-95],[60,-65],[47,-53],[25,-80],[10,-85],[15,-92],[22,-105],[32,-117],[48,-124],[60,-136]],
+
+[[10,-75],[8,-60],[2,-50],[-5,-35],[-15,-39],[-25,-48],[-35,-57],[-55,-68]],
+
+[[36,-8],[43,-9],[48,2],[52,5],[58,5],[62,6],[70,20],[70,30],[55,28],[45,30]],
+
+[[37,10],[37,36],[12,44],[-2,42],[-12,40],[-28,32],[-35,20],[-15,12],[0,8]],
+
+[[38,28],[38,36],[28,34],[12,44],[10,50],[20,58],[30,48],[42,50],[56,58],[66,60],[70,68],[70,90]],
+
+[[70,90],[70,140],[60,150],[38,140],[22,114],[12,100],[5,100],[12,80]],
+
+[[-15,130],[-12,136],[-15,145],[-25,150],[-38,148],[-38,140],[-32,116]],
+
+[[60,-46],[70,-52],[76,-62],[80,-56],[83,-32],[80,-18],[72,-22]]
+];
+
+/* 3D projection */
+function proj(lat, lon){
+
+let phi = lat * Math.PI/180;
+let lam = (lon-rot) * Math.PI/180;
+
+let x = Math.cos(phi)*Math.cos(lam);
+let y = Math.sin(phi);
+let z = Math.cos(phi)*Math.sin(lam);
+
+return {
+  x: cx + z*R,
+  y: cy - y*R,
+  vis: x > 0
+};
+}
+
+/* draw earth */
+function draw(){
+
+ctx.clearRect(0,0,W,H);
+
+/* atmosphere */
+let atm = ctx.createRadialGradient(cx,cy,R-10,cx,cy,R+30);
+
+atm.addColorStop(0,"rgba(96,165,250,0.2)");
+atm.addColorStop(1,"transparent");
+
+ctx.beginPath();
+ctx.arc(cx,cy,R+30,0,Math.PI*2);
+ctx.fillStyle = atm;
+ctx.fill();
+
+/* ocean */
+let ocean = ctx.createRadialGradient(
+  cx-50,cy-50,20,
+  cx,cy,R
+);
+
+ocean.addColorStop(0,"#4fc3f7");
+ocean.addColorStop(.4,"#1565c0");
+ocean.addColorStop(1,"#061539");
+
+ctx.beginPath();
+ctx.arc(cx,cy,R,0,Math.PI*2);
+ctx.fillStyle = ocean;
+ctx.fill();
+
+/* clip sphere */
+ctx.save();
+
+ctx.beginPath();
+ctx.arc(cx,cy,R,0,Math.PI*2);
+ctx.clip();
+
+/* latitude lines */
+for(let lat=-75; lat<=75; lat+=15){
+
+ctx.beginPath();
+
+let started=false;
+
+for(let lon=0; lon<=360; lon+=2){
+
+let p = proj(lat,lon);
+
+if(!p.vis){
+started=false;
+continue;
+}
+
+if(!started){
+ctx.moveTo(p.x,p.y);
+started=true;
+}else{
+ctx.lineTo(p.x,p.y);
+}
+}
+
+ctx.strokeStyle="rgba(255,255,255,0.16)";
+ctx.lineWidth=.8;
+ctx.stroke();
+}
+
+/* longitude lines */
+for(let lon=0; lon<360; lon+=15){
+
+ctx.beginPath();
+
+let started=false;
+
+for(let lat=-90; lat<=90; lat+=2){
+
+let p=proj(lat,lon);
+
+if(!p.vis){
+started=false;
+continue;
+}
+
+if(!started){
+ctx.moveTo(p.x,p.y);
+started=true;
+}else{
+ctx.lineTo(p.x,p.y);
+}
+}
+
+ctx.strokeStyle="rgba(255,255,255,0.12)";
+ctx.lineWidth=.8;
+ctx.stroke();
+}
+
+/* continents */
+lands.forEach(poly=>{
+
+ctx.beginPath();
+
+let started=false;
+
+poly.forEach((pt,i)=>{
+
+let p=proj(pt[0],pt[1]);
+
+if(!p.vis){
+started=false;
+return;
+}
+
+if(!started){
+ctx.moveTo(p.x,p.y);
+started=true;
+}else{
+ctx.lineTo(p.x,p.y);
+}
+});
+
+ctx.closePath();
+
+ctx.fillStyle="rgba(34,197,94,.9)";
+ctx.strokeStyle="rgba(16,185,129,.4)";
+
+ctx.fill();
+ctx.stroke();
+});
+
+ctx.restore();
+
+/* shadow */
+let shadow = ctx.createRadialGradient(
+cx-60,cy-60,10,
+cx,cy,R
+);
+
+shadow.addColorStop(0,"rgba(255,255,255,.3)");
+shadow.addColorStop(.4,"rgba(255,255,255,.05)");
+shadow.addColorStop(1,"rgba(0,0,0,.5)");
+
+ctx.beginPath();
+ctx.arc(cx,cy,R,0,Math.PI*2);
+
+ctx.fillStyle=shadow;
+ctx.fill();
+
+rot += 1.2;
+
+document.getElementById("stat-rot").innerText =
+rot.toFixed(1)+"°";
+
+requestAnimationFrame(draw);
+}
+
+draw();
+
+})();
+</script>
+<script>
+
+/* STARS */
+(function(){
+
+const wrap = document.getElementById('starfield');
+
+for(let i=0;i<250;i++){
+
+const s=document.createElement('div');
+
+s.className='star';
+
+const size=Math.random()*2+0.5;
+
+s.style.cssText=`
+top:${Math.random()*100}%;
+left:${Math.random()*100}%;
+width:${size}px;
+height:${size}px;
+opacity:${Math.random()};
+animation:twinkle ${Math.random()*5+2}s infinite alternate;
+`;
+
+wrap.appendChild(s);
+}
+
+})();
+
+/* REALISTIC EARTH */
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+45,
+1,
+0.1,
+1000
+);
+
+camera.position.z = 3;
+
+const renderer = new THREE.WebGLRenderer({
+antialias:true,
+alpha:true
+});
+
+renderer.setSize(520,520);
+
+document
+.getElementById("earth3d")
+.appendChild(renderer.domElement);
+
+/* geometry */
+const geometry = new THREE.SphereGeometry(
+1,
+128,
+128
+);
+
+/* realistic earth texture */
+const loader = new THREE.TextureLoader();
+
+const texture = loader.load(
+"https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+);
+
+const bump = loader.load(
+"https://threejs.org/examples/textures/planets/earth_normal_2048.jpg"
+);
+
+const spec = loader.load(
+"https://threejs.org/examples/textures/planets/earth_specular_2048.jpg"
+);
+
+const material = new THREE.MeshPhongMaterial({
+map:texture,
+bumpMap:bump,
+bumpScale:0.05,
+specularMap:spec,
+specular:new THREE.Color('grey'),
+shininess:12
+});
+
+const earth = new THREE.Mesh(
+geometry,
+material
+);
+
+scene.add(earth);
+
+/* atmosphere */
+const atmosphereGeo = new THREE.SphereGeometry(
+1.03,
+128,
+128
+);
+
+const atmosphereMat = new THREE.MeshPhongMaterial({
+color:0x60a5fa,
+transparent:true,
+opacity:0.15,
+side:THREE.BackSide
+});
+
+const atmosphere = new THREE.Mesh(
+atmosphereGeo,
+atmosphereMat
+);
+
+scene.add(atmosphere);
+
+/* lighting */
+const light = new THREE.DirectionalLight(
+0xffffff,
+2
+);
+
+light.position.set(5,3,5);
+
+scene.add(light);
+
+const blueLight = new THREE.PointLight(
+0x3b82f6,
+1.5
+);
+
+blueLight.position.set(-5,-3,5);
+
+scene.add(blueLight);
+
+scene.add(new THREE.AmbientLight(
+0x404040,
+1.8
+));
+
+/* animation */
+function animate(){
+
+requestAnimationFrame(animate);
+
+earth.rotation.y += 0.0035;
+
+atmosphere.rotation.y += 0.003;
+
+document.getElementById("stat-rot")
+.innerText =
+(earth.rotation.y*57.2958).toFixed(1)+"°";
+
+renderer.render(scene,camera);
+}
+
+animate();
+
+scene.add(earth);
+/* ===== COORDINATE GRID ===== */
+
+const gridGroup = new THREE.Group();
+
+function createLatitudeRing(radius,y,color){
+
+const curve = new THREE.EllipseCurve(
+0,0,
+radius,radius,
+0,2*Math.PI,
+false,
+0
+);
+
+const points = curve.getPoints(200);
+
+const geometry =
+new THREE.BufferGeometry().setFromPoints(
+points.map(p=>new THREE.Vector3(p.x,y,p.y))
+);
+
+const material = new THREE.LineBasicMaterial({
+color:color,
+transparent:true,
+opacity:0.35
+});
+
+const line = new THREE.LineLoop(
+geometry,
+material
+);
+
+gridGroup.add(line);
+}
+
+/* latitude lines */
+for(let i=-75;i<=75;i+=15){
+
+const r = Math.cos(
+THREE.MathUtils.degToRad(i)
+);
+
+const y = Math.sin(
+THREE.MathUtils.degToRad(i)
+);
+
+createLatitudeRing(
+r,
+y,
+i===0 ? 0xffffff : 0x88ccff
+);
+}
+
+/* longitude lines */
+for(let i=0;i<360;i+=15){
+
+const points=[];
+
+for(let j=-90;j<=90;j+=2){
+
+const lat = THREE.MathUtils.degToRad(j);
+const lon = THREE.MathUtils.degToRad(i);
+
+const x = Math.cos(lat)*Math.cos(lon);
+const y = Math.sin(lat);
+const z = Math.cos(lat)*Math.sin(lon);
+
+points.push(
+new THREE.Vector3(x,y,z)
+);
+}
+
+const geometry =
+new THREE.BufferGeometry().setFromPoints(points);
+
+const material = new THREE.LineBasicMaterial({
+color:i===0 ? 0xff4444 : 0xffffff,
+transparent:true,
+opacity:0.22
+});
+
+const line = new THREE.Line(
+geometry,
+material
+);
+
+gridGroup.add(line);
+}
+
+earth.add(gridGroup);
 </script>
 </body>
 </html>
